@@ -1,0 +1,11 @@
+#H2 settings
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+server:
+  servlet:
+    context-path: /demo
+  port: 8080
