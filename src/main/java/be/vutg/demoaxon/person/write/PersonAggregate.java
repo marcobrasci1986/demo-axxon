@@ -17,8 +17,11 @@ public class PersonAggregate {
 
     private String inss;
 
+    @SuppressWarnings("UnusedDeclaration")
+    public PersonAggregate(){}
+
     @CommandHandler
-    public void OrderAggregate(CreatePersonCommand createPerson) {
+    public PersonAggregate(CreatePersonCommand createPerson){
         apply(new PersonCreatedEvent(createPerson.getUuid(), createPerson.getInss()));
     }
 
@@ -28,4 +31,11 @@ public class PersonAggregate {
         this.inss = event.getInss();
     }
 
+    public UUID getUUID() {
+        return personId;
+    }
+
+    public String getInss() {
+        return inss;
+    }
 }
