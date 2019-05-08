@@ -24,7 +24,7 @@ public class PersonReadController {
     }
 
     @RequestMapping(value = "/findById", method = RequestMethod.GET, produces = "application/json")
-    public PersonQuery getPerson(String uuid) {
+    public PersonProjection getPerson(String uuid) {
         LOGGER.info("Trying to get Person {}", uuid);
         return personRepository.findById(UUID.fromString(uuid)).get();
     }

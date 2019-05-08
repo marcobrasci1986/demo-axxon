@@ -17,6 +17,8 @@ public class PersonAggregate {
 
     private String inss;
 
+    private String name;
+
     @SuppressWarnings("UnusedDeclaration")
     public PersonAggregate(){}
 
@@ -25,10 +27,19 @@ public class PersonAggregate {
         apply(new PersonCreatedEvent(createPerson.getUuid(), createPerson.getInss()));
     }
 
+    public void setName(ChangeNameCommand changeNameCommand){
+        apply(new PersonNameChangedEvent(changeNameCommand.getUuid(), changeNameCommand.getName()));
+    }
+
     @EventSourcingHandler
     public void on(PersonCreatedEvent event) {
         this.personId = event.getPersonId();
         this.inss = event.getInss();
+    }
+
+    @EventSourcingHandler
+    public void on(PersonNameChangedEvent event) {
+       this.name = event.getName();
     }
 
     public UUID getUUID() {
@@ -37,5 +48,9 @@ public class PersonAggregate {
 
     public String getInss() {
         return inss;
+    }
+
+    public String getName() {
+        return name;
     }
 }
