@@ -1,0 +1,17 @@
+version: '3'
+services:
+  demo_axon:
+    image: postgres:alpine
+    ports:
+      - "6434:5432"
+    environment:
+      - POSTGRES_USER=sa
+      - POSTGRES_PASSWORD=sa
+      - POSTGRES_DB=db_eventstore
+#    volumes:
+#      - ~/postgres/eventstore/pgdata:/var/lib/postgresql/data2
+#  rabbitmq:
+#    image: rabbitmq:3-management
+#    ports:
+#      - 5672:5672
+#      - 15672:15672

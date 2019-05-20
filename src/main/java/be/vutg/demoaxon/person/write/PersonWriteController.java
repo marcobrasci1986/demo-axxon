@@ -3,6 +3,7 @@ package be.vutg.demoaxon.person.write;
 import be.vutg.demoaxon.person.read.PersonReadController;
 import io.swagger.annotations.Api;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.axonframework.eventhandling.GenericDomainEventEntry;
 import org.axonframework.eventhandling.GenericDomainEventMessage;
 import org.axonframework.eventsourcing.eventstore.EventStore;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -53,11 +56,23 @@ public class PersonWriteController {
             long sequenceNumber = lastSequenceNumberFor.get() + 1;
             GenericDomainEventMessage<Object> myType = new GenericDomainEventMessage<>("PersonAggregate", uuid, sequenceNumber, name);
             eventStore.publish(myType);
-        }
-        else{
-            GenericDomainEventMessage<Object> myType = new GenericDomainEventMessage<>("PersonAggregate", uuid, 0,name);
+        } else {
+            GenericDomainEventMessage<Object> myType = new GenericDomainEventMessage<>("PersonAggregate", uuid, 0, name);
             eventStore.publish(myType);
         }
+        return personId;
+    }
+
+    @PutMapping("/addChangeEventAsTyped")
+    @Transactional
+    public UUID addChangeEventPersonAsTypedEvent(String uuid, String name) {
+        UUID personId = UUID.fromString(uuid);
+        LOGGER.info("Trying to add event {} for person with uuid {}", name);
+        Optional<Long> lastSequenceNumberFor = eventStore.lastSequenceNumberFor(uuid);
+
+        long sequenceNumber = lastSequenceNumberFor.get() + 1;
+        GenericDomainEventMessage<PersonNameChangedEvent> myType = new GenericDomainEventMessage<PersonNameChangedEvent>("PersonAggregate", uuid, sequenceNumber, new PersonNameChangedEvent(personId, name));
+        eventStore.publish(myType);
         return personId;
     }
 

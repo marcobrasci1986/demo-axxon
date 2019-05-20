@@ -1,17 +1,21 @@
 #H2 settings
 spring:
   datasource:
-    url: jdbc:h2:mem:example-app;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    platform: h2
+    platform: postgresql
+    url: jdbc:postgresql://localhost:6434/db_eventstore
+    driverClassName: org.postgresql.Driver
     username: sa
-    password:
-    driverClassName: org.h2.Driver
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+    password: sa
+  jpa:
+    properties:
+      hibernate:
+        ddl-auto: create-drop
+        jdbc:
+          lob:
+            non_contextual_creation: true
 
 server:
   servlet:
     context-path: /demo
   port: 8080
+

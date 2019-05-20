@@ -4,9 +4,9 @@ import be.vutg.demoaxon.person.read.PersonProjection;
 import be.vutg.demoaxon.person.read.PersonRepository;
 import be.vutg.demoaxon.person.write.PersonAggregate;
 import be.vutg.demoaxon.person.write.PersonEvent;
+import lombok.extern.slf4j.Slf4j;
 import org.axonframework.eventhandling.AllowReplay;
 import org.axonframework.eventhandling.EventHandler;
-import org.axonframework.eventhandling.replay.ReplayAwareMessageHandlerWrapper;
 import org.axonframework.eventsourcing.EventSourcingRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -16,6 +16,7 @@ import java.util.UUID;
 
 
 @Component
+@Slf4j
 public class PersonProjectEntityService {
 
     private final PersonRepository personRepository;
@@ -31,6 +32,7 @@ public class PersonProjectEntityService {
     @EventHandler
     @AllowReplay
     public void on(PersonEvent personEvent){
+        log.info("Trying to change a person {}", personEvent);
         PersonAggregate personFromEvent = loadAggregateFromEvent((UUID)personEvent.getAggregateId());
 
         Optional<PersonProjection> personProjection = personRepository.findById((UUID) personEvent.getAggregateId());
