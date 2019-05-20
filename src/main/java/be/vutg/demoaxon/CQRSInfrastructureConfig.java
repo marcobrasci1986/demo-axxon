@@ -14,6 +14,7 @@ public class CQRSInfrastructureConfig {
     @Bean
     EventSourcingRepository<PersonAggregate> accountAggregateEventSourcingRepository(EventStore eventStore){
         EventSourcingRepository<PersonAggregate> repository = builder(PersonAggregate.class).eventStore(eventStore).build();
+        eventStore.publish();
         return repository;
     }
 }

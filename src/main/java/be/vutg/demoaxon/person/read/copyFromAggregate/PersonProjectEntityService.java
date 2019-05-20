@@ -4,13 +4,16 @@ import be.vutg.demoaxon.person.read.PersonProjection;
 import be.vutg.demoaxon.person.read.PersonRepository;
 import be.vutg.demoaxon.person.write.PersonAggregate;
 import be.vutg.demoaxon.person.write.PersonEvent;
-import org.axonframework.eventsourcing.EventSourcingHandler;
+import org.axonframework.eventhandling.AllowReplay;
+import org.axonframework.eventhandling.EventHandler;
+import org.axonframework.eventhandling.replay.ReplayAwareMessageHandlerWrapper;
 import org.axonframework.eventsourcing.EventSourcingRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 import java.util.UUID;
+
 
 @Component
 public class PersonProjectEntityService {
@@ -24,21 +27,9 @@ public class PersonProjectEntityService {
         this.personRepository = personRepository;
         this.personAggregateEventSourcingRepository = personAggregateEventSourcingRepository;
     }
-    
-    public void recreate(UUID uuid){
-        PersonAggregate personFromEvent = loadAggregateFromEvent(uuid);
 
-        Optional<PersonProjection> personProjection = personRepository.findById(uuid);
-
-        if(personProjection.isPresent()){
-            personRepository.delete(personProjection.get());
-        }
-
-        PersonProjection personQuery = createPersonProjection(personFromEvent);
-        personRepository.save(personQuery);
-    }
-
-    @EventSourcingHandler
+    @EventHandler
+    @AllowReplay
     public void on(PersonEvent personEvent){
         PersonAggregate personFromEvent = loadAggregateFromEvent((UUID)personEvent.getAggregateId());
 

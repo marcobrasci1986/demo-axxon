@@ -27,6 +27,7 @@ public class PersonAggregate {
         apply(new PersonCreatedEvent(createPerson.getUuid(), createPerson.getInss()));
     }
 
+    @CommandHandler
     public void setName(ChangeNameCommand changeNameCommand){
         apply(new PersonNameChangedEvent(changeNameCommand.getUuid(), changeNameCommand.getName()));
     }

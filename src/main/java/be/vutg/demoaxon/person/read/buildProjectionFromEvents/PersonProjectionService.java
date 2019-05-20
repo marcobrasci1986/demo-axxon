@@ -13,18 +13,18 @@ import java.util.Optional;
 @Service
 public class PersonProjectionService {
 
-    @Autowired
-    private PersonRepository personRepository;
-
-    @EventListener
-    public void on(PersonCreatedEvent personCreatedEvent){
-        PersonProjection personProjection = new PersonProjection(personCreatedEvent.getAggregateId(), personCreatedEvent.getInss());
-        personRepository.save(personProjection);
-    }
-
-    @EventListener
-    public void on(PersonNameChangedEvent personNameChangedEvent){
-        Optional<PersonProjection> personProjection = personRepository.findById(personNameChangedEvent.getAggregateId());
-        personProjection.get().setName(personNameChangedEvent.getName());
-    }
+//    @Autowired
+//    private PersonRepository personRepository;
+//
+//    @EventListener
+//    public void on(PersonCreatedEvent personCreatedEvent){
+//        PersonProjection personProjection = new PersonProjection(personCreatedEvent.getAggregateId(), personCreatedEvent.getInss());
+//        personRepository.save(personProjection);
+//    }
+//
+//    @EventListener
+//    public void on(PersonNameChangedEvent personNameChangedEvent){
+//        Optional<PersonProjection> personProjection = personRepository.findById(personNameChangedEvent.getAggregateId());
+//        personProjection.get().setName(personNameChangedEvent.getName());
+//    }
 }
